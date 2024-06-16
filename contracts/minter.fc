@@ -67,7 +67,7 @@ int provide_address_gas_consumption() asm "10000000 PUSHINT";
 
     (int total_supply, slice admin_address, cell content, cell jetton_wallet_code) = load_data();
 
-    if (op == op::mint()) {
+    if (op == op::mint) {
         throw_unless(73, equal_slices(sender_address, admin_address));
         slice to_address = in_msg_body~load_msg_addr();
         int amount = in_msg_body~load_coins();
@@ -80,7 +80,7 @@ int provide_address_gas_consumption() asm "10000000 PUSHINT";
         return ();
     }
 
-    if (op == op::burn_notification()) {
+    if (op == op::burn_notification) {
         int jetton_amount = in_msg_body~load_coins();
         slice from_address = in_msg_body~load_msg_addr();
         throw_unless(74,
@@ -94,14 +94,14 @@ int provide_address_gas_consumption() asm "10000000 PUSHINT";
                     .store_slice(response_address)
                     .store_coins(0)
                     .store_uint(0, 1 + 4 + 4 + 64 + 32 + 1 + 1)
-                    .store_uint(op::excesses(), 32)
+                    .store_uint(op::excesses, 32)
                     .store_uint(query_id, 64);
             send_raw_message(msg.end_cell(), 2 + 64);
         }
         return ();
     }
 
-    if (op == op::provide_wallet_address()) {
+    if (op == op::provide_wallet_address) {
         throw_unless(75, msg_value > fwd_fee + provide_address_gas_consumption());
 
         slice owner_address = in_msg_body~load_msg_addr();
@@ -116,7 +116,7 @@ int provide_address_gas_consumption() asm "10000000 PUSHINT";
                 .store_slice(sender_address)
                 .store_coins(0)
                 .store_uint(0, 1 + 4 + 4 + 64 + 32 + 1 + 1)
-                .store_uint(op::take_wallet_address(), 32)
+                .store_uint(op::take_wallet_address, 32)
                 .store_uint(query_id, 64);
 
         if (is_resolvable?(owner_address)) {

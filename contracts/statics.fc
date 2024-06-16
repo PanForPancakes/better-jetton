@@ -1,21 +1,30 @@
 ;; op-codes.fc
 
-int op::transfer() asm "0xf8a7ea5 PUSHINT";
-int op::transfer_notification() asm "0x7362d09c PUSHINT";
-int op::internal_transfer() asm "0x178d4519 PUSHINT";
-int op::excesses() asm "0xd53276db PUSHINT";
-int op::burn() asm "0x595f07bc PUSHINT";
-int op::burn_notification() asm "0x7bdd97de PUSHINT";
+const op::transfer = "transfer query_id:uint64 amount:VarUInteger 16 destination:MsgAddress response_destination:MsgAddress custom_payload:Maybe ^Cell forward_ton_amount:VarUInteger 16 forward_payload:Either Cell ^Cell = InternalMsgBody"c & 0x7fffffff;
+;; 0xf8a7ea5
 
-int op::mint() asm "21 PUSHINT";
+const op::transfer_notification = "transfer_notification query_id:uint64 amount:VarUInteger 16 sender:MsgAddress forward_payload:Either Cell ^Cell = InternalMsgBody"c & 0x7fffffff;
+;; 0x7362d09c
+
+const op::internal_transfer = "internal_transfer query_id:uint64 amount:VarUInteger 16 from:MsgAddress response_address:MsgAddress forward_ton_amount:VarUInteger 16 forward_payload:Either Cell ^Cell = InternalMsgBody"c & 0x7fffffff;
+;; 0x178d4519
+
+const op::excesses = "excesses query_id:uint64 = InternalMsgBody"c | 0x80000000;
+;; 0xd53276db
+
+const op::burn = "burn query_id:uint64 amount:VarUInteger 16 response_destination:MsgAddress custom_payload:Maybe ^Cell = InternalMsgBody"c & 0x7fffffff;
+;; 0x595f07bc
+
+const op::burn_notification = "burn_notification query_id:uint64 amount:VarUInteger 16 sender:MsgAddress response_destination:MsgAddress = InternalMsgBody"c & 0x7fffffff;
+;; 0x7bdd97de
+
+const op::mint = 21;
 
 
 ;; params.fc
-
-int workchain() asm "0 PUSHINT";
+const workchain = 0;
 
 
 ;; discovery-params.fc
-
-int op::provide_wallet_address() asm "0x2c76b973 PUSHINT";
-int op::take_wallet_address() asm "0xd1735400 PUSHINT";
+const op::provide_wallet_address = "provide_wallet_address query_id:uint64 owner_address:MsgAddress include_address:Bool = InternalMsgBody"c; ;; 0x2c76b973
+const op::take_wallet_address = "take_wallet_address query_id:uint64 wallet_address:MsgAddress owner_address:Maybe ^MsgAddress = InternalMsgBody"c; ;; 0xd1735400

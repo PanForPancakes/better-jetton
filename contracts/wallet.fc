@@ -77,7 +77,7 @@ int gas_consumption() asm "15000000 PUSHINT"; ;; 0.015 TON
     .store_uint(4 + 2 + 1, 1 + 4 + 4 + 64 + 32 + 1 + 1 + 1)
     .store_ref(state_init);
   var msg_body = begin_cell()
-    .store_uint(op::internal_transfer(), 32)
+    .store_uint(op::internal_transfer, 32)
     .store_uint(query_id, 64)
     .store_coins(jetton_amount)
     .store_slice(owner_address)
@@ -134,7 +134,7 @@ int gas_consumption() asm "15000000 PUSHINT"; ;; 0.015 TON
     slice either_forward_payload = in_msg_body;
 
     var msg_body = begin_cell()
-        .store_uint(op::transfer_notification(), 32)
+        .store_uint(op::transfer_notification, 32)
         .store_uint(query_id, 64)
         .store_coins(jetton_amount)
         .store_slice(from_address)
@@ -157,7 +157,7 @@ int gas_consumption() asm "15000000 PUSHINT"; ;; 0.015 TON
       .store_slice(response_address)
       .store_coins(msg_value)
       .store_uint(0, 1 + 4 + 4 + 64 + 32 + 1 + 1)
-      .store_uint(op::excesses(), 32)
+      .store_uint(op::excesses, 32)
       .store_uint(query_id, 64);
     send_raw_message(msg.end_cell(), 2);
   }
@@ -180,7 +180,7 @@ int gas_consumption() asm "15000000 PUSHINT"; ;; 0.015 TON
   throw_unless(707, msg_value > fwd_fee + 2 * gas_consumption());
 
   var msg_body = begin_cell()
-      .store_uint(op::burn_notification(), 32)
+      .store_uint(op::burn_notification, 32)
       .store_uint(query_id, 64)
       .store_coins(jetton_amount)
       .store_slice(owner_address)
@@ -203,7 +203,7 @@ int gas_consumption() asm "15000000 PUSHINT"; ;; 0.015 TON
   in_msg_body~skip_bits(32); ;; 0xFFFFFFFF
   (int balance, slice owner_address, slice jetton_master_address, cell jetton_wallet_code) = load_data();
   int op = in_msg_body~load_uint(32);
-  throw_unless(709, (op == op::internal_transfer()) | (op == op::burn_notification()));
+  throw_unless(709, (op == op::internal_transfer) | (op == op::burn_notification));
   int query_id = in_msg_body~load_uint(64);
   int jetton_amount = in_msg_body~load_coins();
   balance += jetton_amount;
@@ -230,17 +230,17 @@ int gas_consumption() asm "15000000 PUSHINT"; ;; 0.015 TON
 
   int op = in_msg_body~load_uint(32);
 
-  if (op == op::transfer()) { ;; outgoing transfer
+  if (op == op::transfer) { ;; outgoing transfer
     send_tokens(in_msg_body, sender_address, msg_value, fwd_fee);
     return ();
   }
 
-  if (op == op::internal_transfer()) { ;; incoming transfer
+  if (op == op::internal_transfer) { ;; incoming transfer
     receive_tokens(in_msg_body, sender_address, my_balance, fwd_fee, msg_value);
     return ();
   }
 
-  if (op == op::burn()) { ;; burn
+  if (op == op::burn) { ;; burn
     burn_tokens(in_msg_body, sender_address, msg_value, fwd_fee);
     return ();
   }
