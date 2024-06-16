@@ -3,7 +3,7 @@ import { CompilerConfig } from '@ton/blueprint';
 export const compile: CompilerConfig = {
     lang: 'func',
     targets: [
-        'contracts/wallet.fc',
+        'contracts/minter.fc',
         'contracts/statics.fc',
         'contracts/utils.fc'
     ],
