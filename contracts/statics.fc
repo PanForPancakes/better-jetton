@@ -1,3 +1,5 @@
+;; TEP-74 defined operations
+
 const op::transfer = "transfer query_id:uint64 amount:VarUInteger 16 destination:MsgAddress response_destination:MsgAddress custom_payload:Maybe ^Cell forward_ton_amount:VarUInteger 16 forward_payload:Either Cell ^Cell = InternalMsgBody"c & 0x7fffffff;
 ;; 0xf8a7ea5
 
@@ -16,12 +18,19 @@ const op::burn = "burn query_id:uint64 amount:VarUInteger 16 response_destinatio
 const op::burn_notification = "burn_notification query_id:uint64 amount:VarUInteger 16 sender:MsgAddress response_destination:MsgAddress = InternalMsgBody"c & 0x7fffffff;
 ;; 0x7bdd97de
 
+
+;; TEP-89 defined operations
+
 const op::provide_wallet_address = "provide_wallet_address query_id:uint64 owner_address:MsgAddress include_address:Bool = InternalMsgBody"c;
 ;; 0x2c76b973
 
 const op::take_wallet_address = "take_wallet_address query_id:uint64 wallet_address:MsgAddress owner_address:Maybe ^MsgAddress = InternalMsgBody"c;
 ;; 0xd1735400
 
+
+;; custom operations
 const op::mint = 21;
+const op::change_admin = 3;
+const op::change_content = 4;
 
 const st::workchain = 0;
