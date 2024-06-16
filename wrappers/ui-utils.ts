@@ -11,7 +11,7 @@ export const promptBool = async (prompt:string, options:[string, string], ui:UIP
     let opts = options.map(o => o.toLowerCase());
 
     do {
-        let res = (choice ? await ui.choose(prompt, options, (c: string) => c) : await ui.input(`${prompt}(${options[0]}/${options[1]})`)).toLowerCase();
+        let res = (choice ? await ui.choose(prompt, options, (c: string) => c) : await ui.input(`${prompt} (${options[0]}/${options[1]})`)).toLowerCase();
         yes = res == opts[0]
         if(!yes)
             no  = res == opts[1];

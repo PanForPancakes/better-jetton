@@ -38,7 +38,7 @@ const changeAdminAction = async(provider:NetworkProvider, ui:UIProvider) => {
         }
         else {
             ui.write(`New admin address is going to be:${newAdmin}\nKindly double check it!\n`);
-            retry = !(await promptBool('Is it ok?(yes/no)', ['yes', 'no'], ui));
+            retry = !(await promptBool('Is it ok?', ['yes', 'no'], ui));
         }
     } while(retry);
 
@@ -78,7 +78,7 @@ const mintAction = async (provider:NetworkProvider, ui:UIProvider) => {
         mintAddress = await promptAddress(`Please specify address to mint to`, ui, fallbackAddr);
         mintAmount  = await promptAmount('Please provide mint amount in decimal form:', ui);
         ui.write(`Mint ${mintAmount} tokens to ${mintAddress}\n`);
-        retry = !(await promptBool('Is it ok?(yes/no)', ['yes', 'no'], ui));
+        retry = !(await promptBool('Is it ok?', ['yes', 'no'], ui));
     } while(retry);
 
     ui.write(`Minting ${mintAmount} to ${mintAddress}\n`);
