@@ -1,3 +1,8 @@
+#include "imports/stdlib.fc";
+
+#include "statics.fc";
+#include "utils.fc";
+
 ;; Jettons discoverable smart contract
 
 ;; 6905(computational_gas_price) * 1000(cur_gas_price) = 6905000

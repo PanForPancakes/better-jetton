@@ -1,3 +1,8 @@
+#include "imports/stdlib.fc";
+
+#include "statics.fc";
+#include "utils.fc";
+
 ;; Jetton Wallet Smart Contract
 
 {-
