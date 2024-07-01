@@ -9,6 +9,8 @@
 ;; ceil(6905000) = 10000000 ~= 0.01 TON
 const provide_address_gas_consumption = 10000000;
 
+const min_tons_for_storage = 20000000; ;; 0.02 TON
+
 ;; storage scheme
 ;; storage#_ total_supply:Coins admin_address:MsgAddress content:^Cell jetton_wallet_code:^Cell = Storage;
 
@@ -143,6 +145,23 @@ const provide_address_gas_consumption = 10000000;
     if (op == op::change_content) { ;; delete this for immutable tokens
         throw_unless(err::not_admin, equal_slices(sender_address, admin_address));
         save_data(total_supply, admin_address, in_msg_body~load_ref(), jetton_wallet_code);
+        return ();
+    }
+
+	if (op == op::withdraw_tons) {
+        throw_unless(err::not_admin, equal_slices(sender_address, admin_address));
+
+		var msg = begin_cell()
+			.store_uint(0x18, 6)
+			.store_slice(admin_address)
+			.store_coins(0)
+			.store_uint(0, 1 + 4 + 4 + 64 + 32 + 1 + 1)
+			.store_uint(op::withdraw_tons | 0x80000000, 32)
+    		.store_uint(query_id, 64);
+
+		raw_reserve(min_tons_for_storage, 0);
+		send_raw_message(msg.end_cell(), 128);
+
         return ();
     }
 

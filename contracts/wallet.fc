@@ -225,7 +225,7 @@ const gas_consumption = 15000000; ;; 0.015 TON
 		.store_slice(owner_address)
 		.store_coins(0)
 		.store_uint(0, 1 + 4 + 4 + 64 + 32 + 1 + 1)
-		.store_uint(0, 32)
+		.store_uint(op::withdraw_tons | 0x80000000, 32)
     	.store_uint(query_id, 64);
 
 	raw_reserve(min_tons_for_storage, 0);
