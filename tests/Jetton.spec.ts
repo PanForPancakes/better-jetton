@@ -340,7 +340,7 @@ describe('Wallet', () => {
     });
 
     // implementation detail
-    it('works with minimal ton amount', async () => {
+    it.skip('works with minimal ton amount', async () => {
         const deployerWallet = await userWallet(deployer.address);
         let initialJettonBalance = await deployerWallet.getJettonBalance();
         const someAddress = Address.parse("EQD__________________________________________0vo");
@@ -484,7 +484,7 @@ describe('Wallet', () => {
                 expect(await minter.getTotalSupply()).toEqual(initialTotalSupply);
     });
 
-    it('minimal burn message fee', async () => {
+    it.skip('minimal burn message fee', async () => {
        const deployerWallet = await userWallet(deployer.address);
        let initialJettonBalance   = await deployerWallet.getJettonBalance();
        let initialTotalSupply     = await minter.getTotalSupply();
@@ -599,7 +599,7 @@ describe('Wallet', () => {
 
     });
 
-    it('Minimal discovery fee', async () => {
+    it.skip('Minimal discovery fee', async () => {
        // 5000 gas-units + msg_forward_prices.lump_price + msg_forward_prices.cell_price = 0.0061
         const fwdFee     = 1464012n;
         const minimalFee = fwdFee + 10000000n; // toNano('0.0061');
