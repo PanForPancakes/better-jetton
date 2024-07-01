@@ -56,7 +56,7 @@ const gas_consumption = 15000000; ;; 0.015 TON
 	int query_id = in_msg_body~load_uint(64);
 	int jetton_amount = in_msg_body~load_coins();
 	slice to_owner_address = in_msg_body~load_msg_addr();
-	
+
 	force_chain(to_owner_address);
 
 	(int balance, slice owner_address, slice jetton_master_address, cell jetton_wallet_code) = load_data();
@@ -213,6 +213,23 @@ const gas_consumption = 15000000; ;; 0.015 TON
 	save_data(balance, owner_address, jetton_master_address, jetton_wallet_code);
 }
 
+() withdraw_tons (slice in_msg_body, slice sender_address, int msg_value, int fwd_fee) impure {
+	(int balance, slice owner_address, slice jetton_master_address, cell jetton_wallet_code) = load_data();
+
+	int query_id = in_msg_body~load_uint(64);
+
+	throw_unless(err::not_owner, equal_slices(owner_address, sender_address));
+
+	var msg = begin_cell()
+		.store_uint(0x18, 6)
+		.store_slice(owner_address)
+		.store_coins(0)
+		.store_uint(0, 1 + 4 + 4 + 64 + 32 + 1 + 1);
+
+	raw_reserve(min_tons_for_storage, 0);
+	send_raw_message(msg.end_cell(), 128);
+}
+
 () on_bounce (slice in_msg_body) impure {
 	in_msg_body~skip_bits(32); ;; 0xFFFFFFFF
 
@@ -265,6 +282,11 @@ const gas_consumption = 15000000; ;; 0.015 TON
 
 	if (op == op::burn) { ;; burn
 		burn_tokens(in_msg_body, sender_address, msg_value, fwd_fee);
+		return ();
+	}
+
+	if (op == op::withdraw_tons) { ;; withdraw ton excesses
+		withdraw_tons(in_msg_body, sender_address, msg_value, fwd_fee);
 		return ();
 	}
 

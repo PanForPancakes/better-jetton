@@ -28,6 +28,12 @@ const op::take_wallet_address = "take_wallet_address query_id:uint64 wallet_addr
 ;; 0xd1735400
 
 
+;; Non-TEP defined operations, but mentioned in other places (also jetton-excess withdraw exists, but it is not implemented and thus not here)
+
+const op::withdraw_tons = "withdraw_tons query_id:uint64 = InternalMsgBody"c;
+;; 0x6d8e5e3c
+
+
 ;; custom operations
 const op::mint = 21;
 const op::change_admin = 3;

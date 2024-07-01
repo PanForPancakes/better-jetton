@@ -540,7 +540,7 @@ describe('Wallet', () => {
             from: deployerWallet.address,
             to: minter.address,
             aborted: true,
-            exitCode: Errors.unouthorized_burn // Unauthorized burn
+            exitCode: Errors.unauthorized_burn // Unauthorized burn
         });
 
         res = await blockchain.sendMessage(internal({
@@ -850,7 +850,7 @@ describe('Wallet', () => {
 
     // Current wallet version doesn't support those operations
     // implementation detail
-    it.skip('owner can withdraw excesses', async () => {
+    it('owner can withdraw excesses', async () => {
         const deployerWallet = await userWallet(deployer.address);
         await deployer.send({value:toNano('1'), bounce:false, to: deployerWallet.address});
         let initialBalance = (await blockchain.getContract(deployer.address)).balance;
@@ -865,7 +865,7 @@ describe('Wallet', () => {
         expect(finalBalance - initialBalance).toBeGreaterThan(toNano('0.99'));
     });
     // implementation detail
-    it.skip('not owner can not withdraw excesses', async () => {
+    it('not owner can not withdraw excesses', async () => {
         const deployerWallet = await userWallet(deployer.address);
         await deployer.send({value:toNano('1'), bounce:false, to: deployerWallet.address});
         let initialBalance = (await blockchain.getContract(deployer.address)).balance;
