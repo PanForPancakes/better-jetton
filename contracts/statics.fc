@@ -34,3 +34,16 @@ const op::change_admin = 3;
 const op::change_content = 4;
 
 const st::workchain = 0;
+
+;; errors
+const err::invalid_op = 709;
+const err::not_admin = 73;
+const err::unauthorized_burn = 74;
+const err::discovery_fee_not_matched = 75;
+const err::wrong_op = 0xffff;
+const err::not_owner = 705;
+const err::not_enough_ton = 709;
+const err::not_enough_gas = 707;
+const err::not_valid_wallet = 707;
+const err::wrong_workchain = 333;
+const err::balance_error = 706;

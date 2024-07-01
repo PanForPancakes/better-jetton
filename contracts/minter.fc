@@ -68,7 +68,7 @@ const provide_address_gas_consumption = 10000000;
     (int total_supply, slice admin_address, cell content, cell jetton_wallet_code) = load_data();
 
     if (op == op::mint) {
-        throw_unless(73, equal_slices(sender_address, admin_address));
+        throw_unless(err::not_admin, equal_slices(sender_address, admin_address));
         slice to_address = in_msg_body~load_msg_addr();
         int amount = in_msg_body~load_coins();
         cell master_msg = in_msg_body~load_ref();
@@ -83,7 +83,7 @@ const provide_address_gas_consumption = 10000000;
     if (op == op::burn_notification) {
         int jetton_amount = in_msg_body~load_coins();
         slice from_address = in_msg_body~load_msg_addr();
-        throw_unless(74,
+        throw_unless(err::unauthorized_burn,
                 equal_slices(calculate_user_jetton_wallet_address(from_address, my_address(), jetton_wallet_code), sender_address)
         );
         save_data(total_supply - jetton_amount, admin_address, content, jetton_wallet_code);
@@ -102,7 +102,7 @@ const provide_address_gas_consumption = 10000000;
     }
 
     if (op == op::provide_wallet_address) {
-        throw_unless(75, msg_value > fwd_fee + provide_address_gas_consumption);
+        throw_unless(err::discovery_fee_not_matched, msg_value > fwd_fee + provide_address_gas_consumption);
 
         slice owner_address = in_msg_body~load_msg_addr();
         int include_address? = in_msg_body~load_uint(1);
@@ -129,19 +129,19 @@ const provide_address_gas_consumption = 10000000;
     }
 
     if (op == op::change_admin) {
-        throw_unless(73, equal_slices(sender_address, admin_address));
+        throw_unless(err::not_admin, equal_slices(sender_address, admin_address));
         slice new_admin_address = in_msg_body~load_msg_addr();
         save_data(total_supply, new_admin_address, content, jetton_wallet_code);
         return ();
     }
 
     if (op == op::change_content) { ;; delete this for immutable tokens
-        throw_unless(73, equal_slices(sender_address, admin_address));
+        throw_unless(err::not_admin, equal_slices(sender_address, admin_address));
         save_data(total_supply, admin_address, in_msg_body~load_ref(), jetton_wallet_code);
         return ();
     }
 
-    throw(0xffff);
+    throw(err::wrong_op);
 }
 
 (int, int, slice, cell, cell) get_jetton_data() method_id {
