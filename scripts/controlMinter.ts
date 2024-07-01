@@ -4,7 +4,7 @@ import { Minter } from '../wrappers/Minter';
 import { promptBool, promptAmount, promptAddress, displayContentCell, waitForTransaction } from '../wrappers/ui-utils';
 let minterContract:OpenedContract<Minter>;
 
-const adminActions  = ['Mint', 'Change admin'];
+const adminActions  = ['Mint', 'Change admin', 'Withdraw'];
 const userActions   = ['Info', 'Quit'];
 
 
@@ -113,6 +113,28 @@ const mintAction = async (provider:NetworkProvider, ui:UIProvider) => {
     }
 }
 
+const withdrawAction = async (provider:NetworkProvider, ui:UIProvider) => {
+    const sender = provider.sender();
+
+    ui.write(`Withdrawing TONs to ${sender}\n`);
+    const curState     = await await provider.provider(minterContract.address).getState()
+
+    if(curState.last === null)
+        throw("Last transaction can't be null on deployed contract");
+
+    const res = await minterContract.sendWithdrawTons(sender);
+    const gotTrans = await waitForTransaction(provider,
+                                              minterContract.address,
+                                              curState.last.lt,
+                                              10);
+    if (gotTrans) {
+        ui.write("Withdraw successfull!");
+    }
+    else {
+        failedTransMessage(ui);
+    }
+}
+
 export async function run(provider: NetworkProvider) {
     const ui = provider.ui();
     const sender = provider.sender();
@@ -161,6 +183,9 @@ export async function run(provider: NetworkProvider) {
                 break;
             case 'Change admin':
                 await changeAdminAction(provider, ui);
+                break;
+            case 'Withdraw':
+                await withdrawAction(provider, ui);
                 break;
             case 'Info':
                 await infoAction(provider, ui);
