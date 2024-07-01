@@ -35,6 +35,7 @@ const provide_address_gas_consumption = 10000000;
 () mint_tokens(slice to_address, cell jetton_wallet_code, int amount, cell master_msg) impure {
     cell state_init = calculate_jetton_wallet_state_init(to_address, my_address(), jetton_wallet_code);
     slice to_wallet_address = calculate_jetton_wallet_address(state_init);
+	
     var msg = begin_cell()
             .store_uint(0x18, 6)
             .store_slice(to_wallet_address)
@@ -42,6 +43,7 @@ const provide_address_gas_consumption = 10000000;
             .store_uint(4 + 2 + 1, 1 + 4 + 4 + 64 + 32 + 1 + 1 + 1)
             .store_ref(state_init)
             .store_ref(master_msg);
+			
     send_raw_message(msg.end_cell(), 1); ;; pay transfer fees separately, revert on errors
 }
 
@@ -49,17 +51,20 @@ const provide_address_gas_consumption = 10000000;
     if (in_msg_body.slice_empty?()) { ;; ignore empty messages
         return ();
     }
+
     slice cs = in_msg_full.begin_parse();
     int flags = cs~load_uint(4);
 
     if (flags & 1) { ;; ignore all bounced messages
         return ();
     }
+
     slice sender_address = cs~load_msg_addr();
     cs~load_msg_addr(); ;; skip dst
     cs~load_coins(); ;; skip value
     cs~skip_bits(1); ;; skip extracurrency collection
     cs~load_coins(); ;; skip ihr_fee
+
     int fwd_fee = muldiv(cs~load_coins(), 3, 2); ;; we use message fwd_fee for estimation of forward_payload costs
 
     int op = in_msg_body~load_uint(32);
