@@ -17,7 +17,7 @@ export abstract class Op {
 export abstract class Errors {
     static invalid_op = 709;
     static not_admin = 73;
-    static unouthorized_burn = 74;
+    static unauthorized_burn = 74;
     static discovery_fee_not_matched = 75;
     static wrong_op = 0xffff;
     static not_owner = 705;
