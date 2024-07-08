@@ -97,7 +97,7 @@ export class Minter implements Contract {
     */
     static discoveryMessage(owner: Address, include_address: boolean) {
         return beginCell()
-            .storeUint(0x2c76b973, 32)
+            .storeUint(Op.provide_wallet_address, 32)
             .storeUint(0, 64) // op, queryId
             .storeAddress(owner).storeBit(include_address)
             .endCell();
@@ -147,7 +147,7 @@ export class Minter implements Contract {
       withdraw_tons#107c49ef query_id:uint64 = InternalMsgBody;
     */
       static withdrawTonsMessage() {
-        return beginCell().storeUint(0x6d8e5e3c, 32).storeUint(0, 64) // op, queryId
+        return beginCell().storeUint(Op.withdraw_tons, 32).storeUint(0, 64) // op, queryId
                .endCell();
     }
 

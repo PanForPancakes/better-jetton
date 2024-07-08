@@ -39,6 +39,7 @@ const op::mint = 21;
 const op::change_admin = 3;
 const op::change_content = 4;
 
+;; contract constants
 const st::workchain = 0;
 
 ;; errors

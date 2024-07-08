@@ -9,6 +9,8 @@ export abstract class Op {
     static provide_wallet_address = 0x2c76b973;
     static take_wallet_address = 0xd1735400;
 
+    static withdraw_tons = 0x6d8e5e3c;
+
     static mint = 21;
     static change_admin = 3;
     static change_content = 4;
